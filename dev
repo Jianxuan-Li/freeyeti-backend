@@ -1,0 +1,66 @@
+#!/bin/bash
+if [ $1 == "" ]; then
+    echo $"Usage: $0 {backend|down|run|docker-restart}"
+    exit 0
+fi
+
+case $1 in
+    backend | up)
+        mkdir -p ./tmp/{db/backup,pyenv,data/{logs,attachments},cache/pypoetry}
+        docker compose -f docker/docker-compose.dev.yml run --name backend_dev_container -p 8000:8000 backend zsh
+        ;;
+    # the test-in-container command is used to run the tests in a new container.
+    # please keep the test stateless, so that the tests can be run on github actions.
+    test-in-container)
+        mkdir -p ./tmp/{db/backup,pyenv,data/{logs,attachments},cache/pypoetry}
+        docker-compose -f docker/docker-compose.test.yml run backend_test /code/docker/test-in-container.sh
+        docker-compose -f docker/docker-compose.test.yml down
+        ;;
+    initdir)
+        mkdir -p /data/logs
+        mkdir -p /data/attachments
+        if [ -f "$DJANGO_LOG_FILE" ]; then
+            echo "$DJANGO_LOG_FILE exists."
+        else 
+            touch "$DJANGO_LOG_FILE"
+            echo "$DJANGO_LOG_FILE does not exist. created"
+        fi
+        ;;
+    run)
+        poetry run python3 manage.py migrate
+        poetry run python3 manage.py runserver 0.0.0.0:8000
+        ;;
+    mkmsg)
+        poetry run python3 manage.py makemessages -l en
+        ;;
+    comsg)
+        poetry run python3 manage.py compilemessages -l en
+        ;;
+    makemigrations)
+        poetry run python3 manage.py makemigrations
+        ;;
+    createsuperuser)
+        poetry run python3 manage.py createsuperuser
+        ;;
+    migrate)
+        poetry run python3 manage.py migrate
+        ;;
+    test)
+        poetry run python3 manage.py test
+        ;;
+    coverage)
+        poetry run coverage run --source='.' manage.py test
+        poetry run coverage report
+        ;;
+    down)
+        docker compose -f docker/docker-compose.dev.yml down
+        docker stop backend_dev_container
+        docker rm backend_dev_container
+        ;;
+    docker-restart)
+        docker start $(docker ps -a -q -f status=exited)
+        ;;
+    -h | --help)
+        echo $"Usage: $0 {backend|down|run|docker-restart}"
+        ;;
+esac

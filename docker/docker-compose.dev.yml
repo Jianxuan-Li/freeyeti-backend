@@ -1,0 +1,30 @@
+version: "3.5"
+
+services:
+  postgis:
+    image: postgis/postgis:14-3.2
+    ports:
+      - "0.0.0.0:5432:5432"
+    volumes:
+      - ../tmp/db:/var/lib/postgresql/data
+    env_file: ../.env
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "0.0.0.0:8001:80"
+    env_file: ../.env
+    volumes:
+      - ./pgadmin4-servers.json:/pgadmin4/servers.json
+  backend:
+    image: freeyeti/dev-in-docker:python3.10-poetry1.3.1-gdal-dev
+    container_name: backend-dev-container
+    env_file: ../.env
+    ports:
+      - "0.0.0.0:8000:8000"
+    volumes:
+      - ../:/code
+      - ../tmp/data:/data
+      - ../tmp/cache/pypoetry:/root/.cache/pypoetry
+    depends_on:
+      - postgis
+      - pgadmin
