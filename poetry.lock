@@ -639,4 +639,4 @@ testing = ["Pillow (>=6.0.0,<10.0.0)", "Wand (>=0.6,<1.0)", "mock (>=3.0,<4.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "fc4415d278be9a5a62cd95ae7961ddec1faefe47352ce10200f691f82ca4e4b3"
+content-hash = "b000150be18464dc352dc81401786d60f957e9f080a2ffa6f3f823d650daff32"
