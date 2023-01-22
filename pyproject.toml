@@ -12,6 +12,9 @@ wagtail = "^4.1.1"
 tzdata = "^2022.7"
 
 
+[tool.poetry.group.dev.dependencies]
+pycodestyle = "^2.10.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

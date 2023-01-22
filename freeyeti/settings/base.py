@@ -28,6 +28,7 @@ SECRET_KEY = "A_Tiger_app_2023"
 INSTALLED_APPS = [
     "backend.home",
     "backend.search",
+    "backend.blog",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -165,4 +166,34 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"
+WAGTAILADMIN_BASE_URL = "https://freeyeti.net"
+
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    "default": {
+        "WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea",
+        "OPTIONS": {
+            "features": [
+                "h1",
+                "h2",
+                "h3",
+                # "h4",
+                # "h5",
+                # "h6",
+                "bold",
+                "italic",
+                "ol",
+                "ul",
+                "hr",
+                "link",
+                "document-link",
+                "image",
+                "embed",
+                "code",
+                "superscript",
+                "subscript",
+                "strikethrough",
+                "blockquote",
+            ]
+        },
+    },
+}
