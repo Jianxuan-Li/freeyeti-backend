@@ -8,5 +8,15 @@
 		"ms-toolsai.jupyter-renderers",
 		"bibhasdn.django-html"
 	],
-	"workspaceFolder": "/code"
+	"workspaceFolder": "/code",
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "zsh"
+	},
+	"forwardPorts": [
+		8000
+	],
+	// Set environment variables for VS Code and sub-processes
+	"remoteEnv": {
+		"IN_VSCODE": "Yes"
+	}
 }
