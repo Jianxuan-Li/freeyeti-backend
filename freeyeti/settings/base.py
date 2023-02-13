@@ -26,6 +26,7 @@ SECRET_KEY = "A_Tiger_app_2023"
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework",
     "backend.home",
     "backend.search",
     "backend.blog",
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
+    "wagtail.api.v2",
     "wagtail",
     "modelcluster",
     "taggit",

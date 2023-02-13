@@ -715,4 +715,4 @@ testing = ["Pillow (>=6.0.0,<10.0.0)", "Wand (>=0.6,<1.0)", "mock (>=3.0,<4.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "737c1c4e2275f1ea7454448ceac995f1f1d0dd1af1850cc846e7d9e23c6995b6"
+content-hash = "329cb4c543c9544e1be65071632b30f1f6f8573c48c5d401a06f95360f79ad08"
