@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freeyeti-backend-backend
+  labels:
+    app: freeyeti-backend-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: freeyeti-backend-backend
+  template:
+    metadata:
+      labels:
+        app: freeyeti-backend-backend
+    spec:
+      imagePullSecrets:
+        - name: __PULL_SECRET__
+      containers:
+        - name: freeyeti-backend-backend
+          image: __IMAGE_BACKEND__:__IMAGE_TAG__
+          command: ["/app/manage/docker-entrypoint.sh"]
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: freeyeti-backend-env-config
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: app.settings
+          resources:
+            limits:
+              memory: 2048Mi
+              cpu: "0.5"
+          volumeMounts:
+            - name: www-data
+              mountPath: /data
+      volumes:
+        - name: www-data
+          hostPath:
+            path: __WWW_DATA_PATH__

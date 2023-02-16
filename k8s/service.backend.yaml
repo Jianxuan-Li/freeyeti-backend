@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: freeyeti-backend
+spec:
+  selector:
+    app: freeyeti-backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      name: http

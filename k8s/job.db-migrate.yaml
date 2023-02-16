@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: freeyeti-backend-db-migrate
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      imagePullSecrets:
+        - name: __PULL_SECRET__
+      restartPolicy: Never
+      containers:
+        - name: freeyeti-backend-db-migrate
+          image: __IMAGE_BACKEND__:__IMAGE_TAG__
+          imagePullPolicy: Always
+          command: ["./manage", "migrate"]
+          envFrom:
+            - configMapRef:
+                name: freeyeti-backend-env-config
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: app.settings_build
