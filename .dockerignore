@@ -3,6 +3,11 @@
 /static/
 *.sqlite3
 
+/docker/*.yml
+/docker/*.yaml
+/docker/*.env
+/docker/*.json
+
 # Python and others
 __pycache__
 *.pyc

@@ -13,6 +13,7 @@ tzdata = "^2022.7"
 coverage = "^7.1.0"
 djangorestframework = "^3.14.0"
 gunicorn = "^20.1.0"
+psycopg2-binary = "^2.9.5"
 
 
 [tool.poetry.group.dev.dependencies]
