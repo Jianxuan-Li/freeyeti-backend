@@ -58,11 +58,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}
-
-      - 
-        name: Copy build files
-        run: cp -r ./docker/* ./
+          images: ${{ env.BACKEND_IMAGE }}
 
       -
         name: Build and push
