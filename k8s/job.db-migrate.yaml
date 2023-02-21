@@ -14,7 +14,7 @@ spec:
         - name: freeyeti-backend-db-migrate
           image: __IMAGE_BACKEND__:__IMAGE_TAG__
           imagePullPolicy: Always
-          command: ["./manage", "migrate"]
+          command: ["./docker-entrypoint-migrate"]
           envFrom:
             - configMapRef:
                 name: freeyeti-backend-env-config

@@ -19,7 +19,7 @@ spec:
       containers:
         - name: freeyeti-backend-backend
           image: __IMAGE_BACKEND__:__IMAGE_TAG__
-          command: ["/app/manage/docker-entrypoint.sh"]
+          command: ["./docker-entrypoint"]
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
