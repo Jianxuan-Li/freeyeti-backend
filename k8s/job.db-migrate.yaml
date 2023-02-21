@@ -20,4 +20,4 @@ spec:
                 name: freeyeti-backend-env-config
           env:
             - name: DJANGO_SETTINGS_MODULE
-              value: app.settings_build
+              value: freeyeti.settings.build
