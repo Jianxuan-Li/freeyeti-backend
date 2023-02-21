@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: freeyeti-backend-backend
+  name: freeyeti-backend
   labels:
-    app: freeyeti-backend-backend
+    app: freeyeti-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: freeyeti-backend-backend
+      app: freeyeti-backend
   template:
     metadata:
       labels:
-        app: freeyeti-backend-backend
+        app: freeyeti-backend
     spec:
       imagePullSecrets:
         - name: __PULL_SECRET__
       containers:
-        - name: freeyeti-backend-backend
+        - name: freeyeti-backend
           image: __IMAGE_BACKEND__:__IMAGE_TAG__
           command: ["./docker-entrypoint"]
           imagePullPolicy: IfNotPresent
