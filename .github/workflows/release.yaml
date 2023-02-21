@@ -1,8 +1,14 @@
 name: release
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+      - master
+
+# on:
+#   release:
+#     types: [published]
 
 env:
   # Define image names
@@ -58,7 +64,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}
+          images: ${{ env.BACKEND_IMAGE }}
 
       -
         name: Build and push
