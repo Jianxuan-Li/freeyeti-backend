@@ -31,6 +31,10 @@ LOGGING = {
     },
 }
 
+# allowed hosts
+
+ALLOWED_HOSTS = ['freeyeti.net', 'www.freeyeti.net']
+
 try:
     from .local import *
 except ImportError:
