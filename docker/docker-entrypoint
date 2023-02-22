@@ -9,4 +9,4 @@ else
     echo "$DJANGO_LOG_FILE does not exist. created"
 fi
 
-gunicorn -b 0.0.0.0:8000 freeyeti.wsgi
+gunicorn -b 0.0.0.0:8000 app.wsgi

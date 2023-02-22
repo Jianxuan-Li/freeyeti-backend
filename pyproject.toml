@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "freeyeti"
+name = "app"
 version = "0.1.0"
 description = ""
-authors = ["freeyeti"]
+authors = ["JackLi"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

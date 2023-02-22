@@ -1,4 +1,4 @@
-ARG PROJECT_PATH=/freeyeti
+ARG PROJECT_PATH=/app
 
 FROM docker.io/freeyeti/dev-in-docker:pyinstaller5.8.0-poetry1.3.2 AS poetry
 
@@ -30,12 +30,12 @@ COPY . .
 COPY --from=poetry /$PROJECT_PATH/requirements.txt ./
 
 # Project initalization
-ENV DJANGO_SETTINGS_MODULE "freeyeti.settings.build"
+ENV DJANGO_SETTINGS_MODULE "app.settings.build"
 
 RUN yes | pip3 install --no-cache-dir -r requirements.txt \
     && python3 manage.py collectstatic --noinput
 
-ENV DJANGO_SETTINGS_MODULE "freeyeti.settings.production"
+ENV DJANGO_SETTINGS_MODULE "app.settings.production"
 ENV DJANGO_LOG_FILE "/data/logs/debug.log"
 
 COPY ./docker/docker-entrypoint-migrate ./
