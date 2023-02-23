@@ -1,0 +1,59 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: freeyeti-backend-nginx
+  labels:
+    run: freeyeti-backend-nginx
+spec:
+  selector:
+    app: freeyeti-backend-nginx
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freeyeti-backend-nginx
+  labels:
+    app: freeyeti-backend-nginx
+spec:
+  replicas: 8
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: freeyeti-backend-nginx
+  template:
+    metadata:
+      labels:
+        app: freeyeti-backend-nginx
+    spec:
+      imagePullSecrets:
+        - name: __PULL_SECRET__
+      containers:
+        - name: freeyeti-backend-nginx
+          image: __IMAGE_NAME__:__IMAGE_TAG__
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: STATICS_PATH
+              value: /static
+            - name: STATICS_URL
+              value: /static
+          volumeMounts:
+            - name: www-data
+              mountPath: /data
+      volumes:
+        - name: www-data
+          hostPath:
+            path: __WWW_DATA_PATH__

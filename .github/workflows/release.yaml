@@ -13,6 +13,7 @@ on:
 env:
   # Define image names
   BACKEND_IMAGE: ghcr.io/jianxuan-li/freeyeti-backend
+  NGINX_IMAGE: ghcr.io/jianxuan-li/freeyeti-backend-nginx
   REGISTRY: ghcr.io
 
 
@@ -74,6 +75,17 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          target: django
+
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-nginx
+          labels: ${{ steps.meta.outputs.labels }}
+          target: nginx
 
   ## Generate deployment files.
   generate-artifacts:
@@ -102,6 +114,10 @@ jobs:
           sed -i "s@__IMAGE_TAG__@$IMAGE_TAG@g" k8s/deployment.yaml
           sed -i "s@__WWW_DATA_PATH__@$WWW_DATA_PATH@g" k8s/deployment.yaml
           sed -i "s@__PULL_SECRET__@$PULL_SECRET@g" k8s/deployment.yaml
+          sed -i "s@__IMAGE_NAME__@$NGINX_IMAGE@g" k8s/deployment.nginx.yaml
+          sed -i "s@__IMAGE_TAG__@$IMAGE_TAG@g" k8s/deployment.nginx.yaml
+          sed -i "s@__WWW_DATA_PATH__@$WWW_DATA_PATH@g" k8s/deployment.nginx.yaml
+          sed -i "s@__PULL_SECRET__@$PULL_SECRET@g" k8s/deployment.nginx.yaml
           sed -i "s@__IMAGE_BACKEND__@$BACKEND_IMAGE@g" k8s/job.db-migrate.yaml
           sed -i "s@__IMAGE_TAG__@$IMAGE_TAG@g" k8s/job.db-migrate.yaml
           sed -i "s@__PULL_SECRET__@$PULL_SECRET@g" k8s/job.db-migrate.yaml
@@ -139,3 +155,4 @@ jobs:
           kubectl delete -f job.db-migrate.yaml
           kubectl apply -f deployment.yaml
           kubectl apply -f service.backend.yaml
+          kubectl apply -f deployment.nginx.yaml
