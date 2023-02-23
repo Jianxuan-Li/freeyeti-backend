@@ -55,7 +55,7 @@ CMD [ "./docker-entrypoint" ]
 
 FROM nginx:1.22.1-alpine AS nginx
 
-COPY --from=django /app/statics /app/statics
+COPY --from=django /app/static /app/static
 COPY ./docker/nginx-site.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /
