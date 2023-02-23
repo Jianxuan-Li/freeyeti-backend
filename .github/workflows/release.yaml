@@ -77,13 +77,19 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           target: django
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.NGINX_IMAGE }}
+
       -
         name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: nginx-${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           target: nginx
 
