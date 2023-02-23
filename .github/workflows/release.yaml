@@ -83,7 +83,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}-nginx
+          tags: nginx-${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           target: nginx
 

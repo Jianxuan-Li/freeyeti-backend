@@ -53,7 +53,7 @@ VOLUME [ "/www_data" ]
 
 CMD [ "./docker-entrypoint" ]
 
-FROM nginx:1.22.1-alpine AS statics
+FROM nginx:1.22.1-alpine AS nginx
 
 COPY --from=django /app/statics /app/statics
 COPY ./docker/nginx-site.conf /etc/nginx/conf.d/default.conf
