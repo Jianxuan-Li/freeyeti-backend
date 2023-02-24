@@ -36,6 +36,11 @@ ALLOWED_HOSTS = ['freeyeti.net', 'www.freeyeti.net']
 
 FORCE_SCRIPT_NAME = "/backend"
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://freeyeti.net',
+    'https://www.freeyeti.net',
+]
+
 try:
     from .local import *
 except ImportError:
