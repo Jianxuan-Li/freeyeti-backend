@@ -32,8 +32,9 @@ LOGGING = {
 }
 
 # allowed hosts
-
 ALLOWED_HOSTS = ['freeyeti.net', 'www.freeyeti.net']
+
+FORCE_SCRIPT_NAME = "/backend"
 
 try:
     from .local import *
