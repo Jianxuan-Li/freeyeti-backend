@@ -42,6 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 STATIC_URL = "/backend/static/"
+MEDIA_URL = "/backend/media/"
 
 try:
     from .local import *
