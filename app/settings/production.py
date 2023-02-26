@@ -41,6 +41,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://www.freeyeti.net',
 ]
 
+STATIC_URL = "/backend/static/"
+
 try:
     from .local import *
 except ImportError:
