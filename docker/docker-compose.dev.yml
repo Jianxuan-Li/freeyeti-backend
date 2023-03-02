@@ -16,7 +16,7 @@ services:
     volumes:
       - ./pgadmin4-servers.json:/pgadmin4/servers.json
   backend:
-    image: freeyeti/dev-in-docker:python3.10-poetry1.3.1-gdal-dev
+    image: docker.io/freeyeti/dev-in-docker:python3.10-poetry1.4.0-gdal-dev
     container_name: backend-dev-container
     env_file: ../.env
     environment:
