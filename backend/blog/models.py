@@ -15,3 +15,14 @@ class BlogPage(Page):
     api_fields = [
         APIField('body'),
     ]
+
+class BlogIndex(Page):
+    body = RichTextField(blank=True)
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+    ]
+
+    # Export fields over the API
+    api_fields = [
+        APIField('body'),
+    ]
