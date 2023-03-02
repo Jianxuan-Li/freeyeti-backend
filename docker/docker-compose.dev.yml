@@ -6,7 +6,7 @@ services:
     ports:
       - "0.0.0.0:5432:5432"
     volumes:
-      - ../tmp/db:/var/lib/postgresql/data
+      - freeyeti-backend-postgisdb:/var/lib/postgresql/data
     env_file: ../.env
   pgadmin:
     image: dpage/pgadmin4
@@ -19,12 +19,18 @@ services:
     image: freeyeti/dev-in-docker:python3.10-poetry1.3.1-gdal-dev
     container_name: backend-dev-container
     env_file: ../.env
+    environment:
+      - IN_CONTAINER=yes
     ports:
       - "0.0.0.0:8000:8000"
     volumes:
       - ../:/code
       - ../tmp/data:/data
-      - ../tmp/cache/pypoetry:/root/.cache/pypoetry
+      - freeyeti-backend-pypoetrycache:/root/.cache/pypoetry
     depends_on:
       - postgis
       - pgadmin
+
+volumes:
+  freeyeti-backend-pypoetrycache:
+  freeyeti-backend-postgisdb:

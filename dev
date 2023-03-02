@@ -6,15 +6,19 @@ fi
 
 case $1 in
     backend | up)
+        if [ -z "$IN_CONTAINER" ] && [ "$IN_CONTAINER" == "yes" ]; then
+            echo "Use this command out of container."
+            exit 0
+        fi
         mkdir -p ./tmp/{db/backup,pyenv,data/{logs,attachments},cache/pypoetry}
-        docker compose -f docker/docker-compose.dev.yml run --name backend_dev_container -p 8000:8000 backend zsh
+        docker compose -p freeyeti-backend -f docker/docker-compose.dev.yml run --name backend_dev_container -p 8000:8000 backend zsh
         ;;
     # the test-in-container command is used to run the tests in a new container.
     # please keep the test stateless, so that the tests can be run on github actions.
     test-in-container)
         mkdir -p ./tmp/{db/backup,pyenv,data/{logs,attachments},cache/pypoetry}
-        docker-compose -f docker/docker-compose.test.yml run backend_test /code/docker/test-in-container.sh
-        docker-compose -f docker/docker-compose.test.yml down
+        docker compose -p freeyeti-backend -f docker/docker-compose.test.yml run backend_test /code/docker/test-in-container.sh
+        docker compose -p freeyeti-backend -f docker/docker-compose.test.yml down
         ;;
     initdir)
         mkdir -p /data/logs
@@ -27,6 +31,10 @@ case $1 in
         fi
         ;;
     run)
+        if [ -z "$IN_CONTAINER" ] || [ "$IN_CONTAINER" != "yes" ]; then
+            echo "Use this command in container."
+            exit 0
+        fi
         poetry run python3 manage.py migrate
         poetry run python3 manage.py runserver 0.0.0.0:8000
         ;;
@@ -53,7 +61,11 @@ case $1 in
         poetry run coverage report
         ;;
     down)
-        docker compose -f docker/docker-compose.dev.yml down
+        if [ -z "$IN_CONTAINER" ] && [ "$IN_CONTAINER" == "yes" ]; then
+            echo "Use this command out of container."
+            exit 0
+        fi
+        docker compose -p freeyeti-backend -f docker/docker-compose.dev.yml down
         docker stop backend_dev_container
         docker rm backend_dev_container
         ;;
