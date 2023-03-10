@@ -191,6 +191,3 @@ pip-delete-this-directory.txt
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
-
-# crong dev
-dev.py
