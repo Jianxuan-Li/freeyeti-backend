@@ -36,7 +36,6 @@ RUN yes | pip3 install --no-cache-dir -r requirements.txt \
     && python3 manage.py collectstatic --noinput
 
 ENV DJANGO_SETTINGS_MODULE "app.settings.production"
-ENV DJANGO_LOG_FILE "/data/logs/debug.log"
 
 COPY ./docker/docker-entrypoint-migrate ./
 COPY ./docker/docker-entrypoint ./

@@ -1,6 +1,5 @@
 #!/bin/bash
 mkdir -p /data/cache
-mkdir -p /data/logs
 
 if [ -f "$DJANGO_LOG_FILE" ]; then
     echo "$DJANGO_LOG_FILE exists."

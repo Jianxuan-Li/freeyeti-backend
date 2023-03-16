@@ -6,7 +6,7 @@ services:
     ports:
       - "0.0.0.0:5432:5432"
     volumes:
-      - ../tmp/db:/var/lib/postgresql/data
+      - postgisdb:/var/lib/postgresql/data
     env_file: ../.env
   backend_test:
     image: freeyeti/dev-in-docker:python3.10-poetry1.3.1-gdal-dev
@@ -19,6 +19,8 @@ services:
     volumes:
       - ../:/code
       - ../tmp/data:/data
-      - ../tmp/cache/pypoetry:/root/.cache/pypoetry
     depends_on:
       - postgis_test
+
+volumes:
+  postgisdb:

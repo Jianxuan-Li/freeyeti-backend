@@ -1,5 +1,4 @@
 #!/bin/sh
-mkdir -p /data/logs
 mkdir -p /data/attachments
 
 if [ -f "$DJANGO_LOG_FILE" ]; then

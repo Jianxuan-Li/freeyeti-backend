@@ -20,16 +20,6 @@ case $1 in
         docker compose -p freeyeti-backend -f docker/docker-compose.test.yml run backend_test /code/docker/test-in-container.sh
         docker compose -p freeyeti-backend -f docker/docker-compose.test.yml down
         ;;
-    initdir)
-        mkdir -p /data/logs
-        mkdir -p /data/attachments
-        if [ -f "$DJANGO_LOG_FILE" ]; then
-            echo "$DJANGO_LOG_FILE exists."
-        else 
-            touch "$DJANGO_LOG_FILE"
-            echo "$DJANGO_LOG_FILE does not exist. created"
-        fi
-        ;;
     run)
         if [ -z "$IN_CONTAINER" ] || [ "$IN_CONTAINER" != "yes" ]; then
             echo "Use this command in container."
