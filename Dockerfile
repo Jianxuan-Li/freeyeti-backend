@@ -40,12 +40,10 @@ ENV DJANGO_SETTINGS_MODULE "app.settings.production"
 COPY ./docker/docker-entrypoint-migrate ./
 COPY ./docker/docker-entrypoint ./
 COPY ./docker/test-in-container.sh ./
-COPY ./docker/backup-db.sh ./
 
 RUN chmod +x ./docker-entrypoint
 RUN chmod +x ./docker-entrypoint-migrate
 RUN chmod +x ./test-in-container.sh
-RUN chmod +x ./backup-db.sh
 
 EXPOSE 8000
 VOLUME [ "/www_data" ]
