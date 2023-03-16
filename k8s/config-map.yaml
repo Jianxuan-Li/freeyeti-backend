@@ -4,7 +4,7 @@ metadata:
   name: freeyeti-backend-env-config
   namespace: default
 data:
-  DB_HOST: postgis
+  DB_HOST: postgis15
   DB_NAME: freeyeti
   DB_PWD: postgres
   DB_USER: postgres
