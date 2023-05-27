@@ -166,10 +166,37 @@ jobs:
             k8s/job.db-migrate.yaml
             k8s/service.backend.yaml
             k8s/deployment.nginx.yaml
+  # deploy:
+  #   needs: generate-artifacts
+
+  #   runs-on: [self-hosted]
+
+  #   steps:
+  #     - name: download deployment files
+  #       uses: actions/download-artifact@v3
+  #       env:
+  #         IMAGE_TAG: ${{ github.ref_name }}
+  #       with:
+  #         name: ${{ github.event.repository.name }}-deployment
+  #         path: /root/deployment/freeyeti/${{ github.ref_name }}
+
+  #     - name: deploy
+  #       working-directory: /root/deployment/freeyeti/${{ github.ref_name }}
+  #       run: |
+  #         kubectl apply -f config-map.yaml
+  #         kubectl delete -f job.db-migrate.yaml || echo "Database migration job is not exists"
+  #         kubectl apply -f job.db-migrate.yaml
+  #         kubectl wait --timeout=300s --for=condition=complete jobs/freeyeti-backend-db-migrate
+  #         kubectl logs -f jobs/freeyeti-backend-db-migrate
+  #         kubectl delete -f job.db-migrate.yaml
+  #         kubectl apply -f deployment.yaml
+  #         kubectl apply -f service.backend.yaml
+  #         kubectl apply -f deployment.nginx.yaml
+
   deploy:
     needs: generate-artifacts
 
-    runs-on: [self-hosted]
+    runs-on: [ubuntu-latest]
 
     steps:
       - name: download deployment files
@@ -178,17 +205,30 @@ jobs:
           IMAGE_TAG: ${{ github.ref_name }}
         with:
           name: ${{ github.event.repository.name }}-deployment
-          path: /root/deployment/freeyeti/${{ github.ref_name }}
-
-      - name: deploy
-        working-directory: /root/deployment/freeyeti/${{ github.ref_name }}
-        run: |
-          kubectl apply -f config-map.yaml
-          kubectl delete -f job.db-migrate.yaml || echo "Database migration job is not exists"
-          kubectl apply -f job.db-migrate.yaml
-          kubectl wait --timeout=300s --for=condition=complete jobs/freeyeti-backend-db-migrate
-          kubectl logs -f jobs/freeyeti-backend-db-migrate
-          kubectl delete -f job.db-migrate.yaml
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.backend.yaml
-          kubectl apply -f deployment.nginx.yaml
+          path: ${{ github.ref_name }}
+      
+      - name: scp to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          source: ${{ github.ref_name }}
+          target: ${{ secrets.DEPLOYMENTS_PATH }}
+          
+      - name : ssh to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/config-map.yaml
+            kubectl delete -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/job.db-migrate.yaml || echo "Database migration job is not exists"
+            kubectl apply -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/job.db-migrate.yaml
+            kubectl wait --timeout=300s --for=condition=complete jobs/freeyeti-backend-db-migrate
+            kubectl logs -f jobs/freeyeti-backend-db-migrate
+            kubectl delete -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/job.db-migrate.yaml
+            kubectl apply -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/deployment.yaml
+            kubectl apply -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/service.backend.yaml
+            kubectl apply -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/deployment.nginx.yaml
