@@ -164,8 +164,7 @@ MEDIA_URL = "/media/"
 
 
 # Wagtail settings
-
-WAGTAIL_SITE_NAME = "freeyeti"
+WAGTAIL_SITE_NAME = "YetiBlog"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
