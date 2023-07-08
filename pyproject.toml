@@ -15,6 +15,7 @@ psycopg2-binary = "^2.9.5"
 wand = "^0.6.11"
 django = "^4.2.1"
 wagtail = "^5.0.1"
+wagtailcodeblock = "^1.29.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

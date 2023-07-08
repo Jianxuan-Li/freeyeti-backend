@@ -11,7 +11,7 @@
   <h1>{{ page.title }}</h1>
   <div><span>{{ page.last_published_at|date:"F d, Y" }}</span></div>
   <div>
-    {{ page.body | safe }}
+    {{ page.context | safe }}
   </div>
 </body>
 </html>

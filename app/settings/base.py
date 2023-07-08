@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "wagtail.admin",
     "wagtail.api.v2",
     "wagtail",
+    "wagtailcodeblock",
     "modelcluster",
     "taggit",
     "django.contrib.admin",
@@ -202,7 +203,10 @@ WAGTAILADMIN_RICH_TEXT_EDITORS = {
                 "superscript",
                 "subscript",
                 "strikethrough",
+                "underline",
                 "blockquote",
+                "help-text",
+                "code-block",
             ]
         },
     },
