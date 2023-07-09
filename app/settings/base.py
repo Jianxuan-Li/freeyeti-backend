@@ -203,10 +203,7 @@ WAGTAILADMIN_RICH_TEXT_EDITORS = {
                 "superscript",
                 "subscript",
                 "strikethrough",
-                "underline",
                 "blockquote",
-                "help-text",
-                "code-block",
             ]
         },
     },
