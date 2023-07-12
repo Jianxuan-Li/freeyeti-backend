@@ -161,7 +161,6 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}-deployment
           path: |
-            k8s/config-map.yaml
             k8s/deployment.yaml
             k8s/job.db-migrate.yaml
             k8s/service.backend.yaml
@@ -183,7 +182,6 @@ jobs:
   #     - name: deploy
   #       working-directory: /root/deployment/freeyeti/${{ github.ref_name }}
   #       run: |
-  #         kubectl apply -f config-map.yaml
   #         kubectl delete -f job.db-migrate.yaml || echo "Database migration job is not exists"
   #         kubectl apply -f job.db-migrate.yaml
   #         kubectl wait --timeout=300s --for=condition=complete jobs/freeyeti-backend-db-migrate
@@ -223,7 +221,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           script: |
-            kubectl apply -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/config-map.yaml
             kubectl delete -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/job.db-migrate.yaml || echo "Database migration job is not exists"
             kubectl apply -f ${{secrets.DEPLOYMENTS_PATH}}/${{ github.ref_name }}/job.db-migrate.yaml
             kubectl wait --timeout=300s --for=condition=complete jobs/freeyeti-backend-db-migrate

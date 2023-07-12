@@ -11,6 +11,12 @@
 * in the container run `./dev test` to run the tests
 * exit the container with `exit`, then use `./dev down` to stop and remove the container
 
+### .env.local
+
+```bash
+SECRET_KEY = "A_Tiger_app_2023"
+```
+
 ### Dev server
 
 * api is available at `http://localhost:8000/api/`
