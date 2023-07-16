@@ -1,5 +1,7 @@
 # Backend of freeyeti.net
 
+![release](https://github.com/jianxuan-li/freeyeti-backend/actions/workflows/release.yaml/badge.svg)
+
 ## Development
 
 ### commands
