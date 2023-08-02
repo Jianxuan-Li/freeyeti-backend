@@ -17,11 +17,13 @@ django = "^4.2.1"
 wagtail = "^5.0.1"
 wagtailcodeblock = "^1.29.0.0"
 django-cors-headers = "^4.2.0"
-youtube-dl = {git = "https://github.com/ytdl-org/youtube-dl.git"}
-
 
 [tool.poetry.group.dev.dependencies]
 pycodestyle = "^2.10.0"
+
+
+[tool.poetry.group.youtube.dependencies]
+youtube-dl = {git = "https://github.com/ytdl-org/youtube-dl.git"}
 
 [build-system]
 requires = ["poetry-core"]

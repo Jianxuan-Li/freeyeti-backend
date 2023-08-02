@@ -886,7 +886,7 @@ testing = ["Pillow (>=9.1.0,<11.0.0)", "Wand (>=0.6,<1.0)", "mock (>=3.0,<4.0)",
 name = "youtube-dl"
 version = "2021.12.17"
 description = "YouTube video downloader"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = []
@@ -901,4 +901,4 @@ resolved_reference = "2efc8de4d2299e08e0c84d674d7fc7f3fa669487"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8134fc87f84c182b23c0f4d61cb4f3402cdd2c7feb66bff7c5f0f9a076d3a095"
+content-hash = "4ca1cb5089460b44a5b982aea2c206695d1856b8a75c190c4df5908f4973f212"

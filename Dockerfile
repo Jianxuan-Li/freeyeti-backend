@@ -7,7 +7,7 @@ RUN mkdir -p $PROJECT_PATH
 WORKDIR $PROJECT_PATH
 COPY . .
 
-RUN poetry export --output requirements.txt
+RUN poetry export --without youtube --output requirements.txt
 
 FROM docker.io/freeyeti/dev-in-docker:python3.10-gdal3.4.1-libmagickwand AS django
 
@@ -32,7 +32,12 @@ COPY --from=poetry /$PROJECT_PATH/requirements.txt ./
 # Project initalization
 ENV DJANGO_SETTINGS_MODULE "app.settings.build"
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 RUN yes | pip3 install --no-cache-dir -r requirements.txt \
+    && yes | pip3 install 'git+https://github.com/ytdl-org/youtube-dl.git' \
+    && yes | pip3 install --upgrade --force-reinstall 'git+https://github.com/ytdl-org/youtube-dl.git' \
     && python3 manage.py collectstatic --noinput
 
 ENV DJANGO_SETTINGS_MODULE "app.settings.production"
