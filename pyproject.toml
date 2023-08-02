@@ -16,6 +16,8 @@ wand = "^0.6.11"
 django = "^4.2.1"
 wagtail = "^5.0.1"
 wagtailcodeblock = "^1.29.0.0"
+django-cors-headers = "^4.2.0"
+youtube-dl = {git = "https://github.com/ytdl-org/youtube-dl.git"}
 
 
 [tool.poetry.group.dev.dependencies]

@@ -8,6 +8,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from backend.search import views as search_views
 from .apis import api_router
+from backend.watch import urls as watch_urls
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -27,6 +28,7 @@ if settings.DEBUG:
 
 urlpatterns = urlpatterns + [
     path('api/v2/', api_router.urls),
+    path('api/v1/watch/', include(watch_urls)),
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in

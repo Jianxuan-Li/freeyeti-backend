@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "backend.home",
     "backend.search",
     "backend.blog",
+    "backend.watch",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
