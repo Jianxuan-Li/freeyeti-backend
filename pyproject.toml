@@ -6,7 +6,7 @@ authors = ["JackLi"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 tzdata = "^2022.7"
 coverage = "^7.1.0"
 djangorestframework = "^3.14.0"

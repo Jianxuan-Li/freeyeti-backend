@@ -1,6 +1,6 @@
 ARG PROJECT_PATH=/app
 
-FROM docker.io/freeyeti/dev-in-docker:pyinstaller5.8.0-poetry1.4.0 AS poetry
+FROM docker.io/freeyeti/dev-in-docker:python3.11-pyinstaller5.13.0-poetry1.5.1 AS poetry
 
 ARG PROJECT_PATH
 RUN mkdir -p $PROJECT_PATH
@@ -9,7 +9,7 @@ COPY . .
 
 RUN poetry export --without youtube --output requirements.txt
 
-FROM docker.io/freeyeti/dev-in-docker:python3.10-gdal3.4.1-libmagickwand AS django
+FROM docker.io/freeyeti/dev-in-docker:python3.11-gdal3.6.2-libmagickwand AS django
 
 ARG PROJECT_PATH
 

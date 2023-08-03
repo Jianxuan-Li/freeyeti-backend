@@ -9,7 +9,7 @@ services:
       - postgisdb:/var/lib/postgresql/data
     env_file: ../.env
   backend_test:
-    image: freeyeti/dev-in-docker:python3.10-poetry1.3.1-gdal-dev
+    image: docker.io/freeyeti/dev-in-docker:python3.11-poetry1.5.1-gdal-dev
     env_file: ../.env
     environment:
       - DB_HOST=postgis_test
