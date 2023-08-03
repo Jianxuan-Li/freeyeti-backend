@@ -27,6 +27,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 INSTALLED_APPS = [
     "rest_framework",
+    "rest_framework.authtoken",
+    "rest_registration",
     "backend.home",
     "backend.search",
     "backend.blog",
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -208,4 +211,29 @@ WAGTAILADMIN_RICH_TEXT_EDITORS = {
             ]
         },
     },
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+}
+
+REST_REGISTRATION = {
+    "REGISTER_VERIFICATION_ENABLED": False,
+    "RESET_PASSWORD_VERIFICATION_ENABLED": False,
+    "REGISTER_EMAIL_VERIFICATION_ENABLED": False,
+    "REGISTER_VERIFICATION_URL": "https://freeyeti.net/verify-user/",
+    "RESET_PASSWORD_VERIFICATION_URL": "https://freeyeti.net/reset-password/",
+    "REGISTER_EMAIL_VERIFICATION_URL": "https://freeyeti.net/verify-email/",
+    "VERIFICATION_FROM_EMAIL": "no-reply@freeyeti.net",
+    "LOGIN_RETRIEVE_TOKEN": True
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Freeyeti backend API",
+    "DESCRIPTION": "Freeyeti backend API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
