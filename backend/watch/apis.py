@@ -8,6 +8,7 @@ from django.conf import settings
 import youtube_dl
 
 video_root = settings.MEDIA_ROOT + "/videos/"
+image_ext = ["jpg", "jpeg", "png", "webp"]
 
 
 class WatchList(APIView):
@@ -33,8 +34,11 @@ class WatchList(APIView):
                 "title": video.split(".")[0],
                 "url": settings.MEDIA_URL + "videos/" + video,
             }
-            if os.path.exists(video_root + name + ".webp"):
-                info["thumbnail"] = settings.MEDIA_URL + "videos/" + name + ".webp"
+
+            for ext in image_ext:
+                if os.path.exists(video_root + name + "." + ext):
+                    info["thumbnail"] = settings.MEDIA_URL + "videos/" + name + "." + ext
+                    break
             data.append(info)
 
         return Response(
