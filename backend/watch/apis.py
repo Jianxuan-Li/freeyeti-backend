@@ -63,12 +63,23 @@ class Video(APIView):
             video_info = get_youtube_video_info(video_id)
         except:
             return Response(
-                {"message": "Invalid video id"}, status=status.HTTP_400_BAD_REQUEST
+                {"message": "Video info not found"}, status=status.HTTP_400_BAD_REQUEST
             )
 
         if Watch.objects.filter(video_id=video_id).exists():
+            if Watch.objects.filter(video_id=video_id, user=request.user).exists():
+                return Response(
+                    {"message": "Video already exists"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            Watch.objects.create(
+                title=video_info["title"],
+                video_id=video_id,
+                user=request.user,
+            )
             return Response(
-                {"message": "Video already exists"}, status=status.HTTP_400_BAD_REQUEST
+                {"message": "Video already exists, copied"}, status=status.HTTP_200_OK
             )
 
         video_path = video_root + video_id + ".mp4"
@@ -114,16 +125,17 @@ class Video(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        video_path = video_root + video_id + ".mp4"
-        if os.path.exists(video_path):
-            os.remove(video_path)
+        if Watch.objects.filter(video_id=video_id).count() == 1:
+            video_path = video_root + video_id + ".mp4"
+            if os.path.exists(video_path):
+                os.remove(video_path)
 
-        for ext in image_ext:
-            if os.path.exists(video_root + video_id + "." + ext):
-                os.remove(video_root + video_id + "." + ext)
-                break
+            for ext in image_ext:
+                if os.path.exists(video_root + video_id + "." + ext):
+                    os.remove(video_root + video_id + "." + ext)
+                    break
 
-        Watch.objects.filter(video_id=video_id).delete()
+        Watch.objects.filter(video_id=video_id, user=request.user).delete()
 
         return Response(
             {"message": "Video deleted successfully"}, status=status.HTTP_200_OK
