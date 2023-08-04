@@ -97,16 +97,14 @@ APPEND_SLASH = False
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PWD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-        'TEST': {
-            'NAME': os.environ.get('TEST_DB_NAME')
-        },
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PWD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
+        "TEST": {"NAME": os.environ.get("TEST_DB_NAME")},
     }
 }
 
@@ -228,7 +226,7 @@ REST_REGISTRATION = {
     "RESET_PASSWORD_VERIFICATION_URL": "https://freeyeti.net/reset-password/",
     "REGISTER_EMAIL_VERIFICATION_URL": "https://freeyeti.net/verify-email/",
     "VERIFICATION_FROM_EMAIL": "no-reply@freeyeti.net",
-    "LOGIN_RETRIEVE_TOKEN": True
+    "LOGIN_RETRIEVE_TOKEN": True,
 }
 
 SPECTACULAR_SETTINGS = {
@@ -237,3 +235,5 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")

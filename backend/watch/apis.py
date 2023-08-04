@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
 from django.conf import settings
 import youtube_dl
+from .youtube_utils import get_youtube_video_info
+from .models import Watch
 
 video_root = settings.MEDIA_ROOT + "/videos/"
 image_ext = ["jpg", "jpeg", "png", "webp"]
@@ -20,24 +22,20 @@ class WatchList(APIView):
         if not os.path.exists(video_root):
             os.makedirs(video_root)
 
-        videos = os.listdir(video_root)
-
+        videos = Watch.objects.filter(user=request.user).order_by("-created_at").all()
         data = []
 
         for video in videos:
-            name, ext = video.split(".")[0], video.split(".")[1]
-            if ext != "mp4":
-                continue
-
             info = {
-                "title": video.split(".")[0],
-                "url": settings.MEDIA_URL + "videos/" + video,
+                "title": video.title,
+                "videoId": video.video_id,
+                "url": settings.MEDIA_URL + "videos/" + video.video_id + ".mp4",
             }
 
             for ext in image_ext:
-                if os.path.exists(video_root + name + "." + ext):
+                if os.path.exists(video_root + video.video_id + "." + ext):
                     info["thumbnail"] = (
-                        settings.MEDIA_URL + "videos/" + name + "." + ext
+                        settings.MEDIA_URL + "videos/" + video.video_id + "." + ext
                     )
                     break
             data.append(info)
@@ -56,10 +54,21 @@ class Video(APIView):
     # authentication_classes = []
 
     def post(self, request, video_id):
-        # test video_id matchs (.*?)(^|\/|v=)([a-z0-9_-]{11})(.*)?
         if not re.match(r"([a-zA-Z0-9_-]{11})", video_id):
             return Response(
                 {"message": "Invalid video id"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            video_info = get_youtube_video_info(video_id)
+        except:
+            return Response(
+                {"message": "Invalid video id"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if Watch.objects.filter(video_id=video_id).exists():
+            return Response(
+                {"message": "Video already exists"}, status=status.HTTP_400_BAD_REQUEST
             )
 
         video_path = video_root + video_id + ".mp4"
@@ -76,9 +85,35 @@ class Video(APIView):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
+        for ext in image_ext:
+            if os.path.exists(video_root + video_id + "." + ext):
+                break
+
+        Watch.objects.create(
+            title=video_info["title"],
+            video_id=video_id,
+            user=request.user,
+        )
+
         return Response({"message": "Video uploaded successfully"})
 
     def delete(self, request, video_id):
+        if not re.match(r"([a-zA-Z0-9_-]{11})", video_id):
+            return Response(
+                {"message": "Invalid video id"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not Watch.objects.filter(video_id=video_id).exists():
+            return Response(
+                {"message": "Video does not exist"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not Watch.objects.filter(video_id=video_id, user=request.user).exists():
+            return Response(
+                {"message": "You are not allowed to delete this video"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         video_path = video_root + video_id + ".mp4"
         if os.path.exists(video_path):
             os.remove(video_path)
@@ -87,6 +122,8 @@ class Video(APIView):
             if os.path.exists(video_root + video_id + "." + ext):
                 os.remove(video_root + video_id + "." + ext)
                 break
+
+        Watch.objects.filter(video_id=video_id).delete()
 
         return Response(
             {"message": "Video deleted successfully"}, status=status.HTTP_200_OK
