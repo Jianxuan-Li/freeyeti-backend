@@ -36,7 +36,9 @@ class WatchList(APIView):
 
             for ext in image_ext:
                 if os.path.exists(video_root + name + "." + ext):
-                    info["thumbnail"] = settings.MEDIA_URL + "videos/" + name + "." + ext
+                    info["thumbnail"] = (
+                        settings.MEDIA_URL + "videos/" + name + "." + ext
+                    )
                     break
             data.append(info)
 
@@ -78,13 +80,13 @@ class Video(APIView):
 
     def delete(self, request, video_id):
         video_path = video_root + video_id + ".mp4"
-        thumbnail_path = video_root + video_id + ".webp"
-
         if os.path.exists(video_path):
             os.remove(video_path)
 
-        if os.path.exists(thumbnail_path):
-            os.remove(thumbnail_path)
+        for ext in image_ext:
+            if os.path.exists(video_root + video_id + "." + ext):
+                os.remove(video_root + video_id + "." + ext)
+                break
 
         return Response(
             {"message": "Video deleted successfully"}, status=status.HTTP_200_OK
