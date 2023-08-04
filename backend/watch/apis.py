@@ -12,9 +12,9 @@ image_ext = ["jpg", "jpeg", "png", "webp"]
 
 
 class WatchList(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    # permission_classes = [permissions.AllowAny]
-    # authentication_classes = []
+    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
 
     def get(self, request):
         if not os.path.exists(video_root):
@@ -49,8 +49,9 @@ class WatchList(APIView):
 
 
 class Video(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    # authentication_classes = []
+    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
 
     def post(self, request, video_id):
         # test video_id matchs (.*?)(^|\/|v=)([a-z0-9_-]{11})(.*)?
