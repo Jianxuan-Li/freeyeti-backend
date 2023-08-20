@@ -59,3 +59,25 @@ class BlogIndex(Page):
     api_fields = [
         APIField('body'),
     ]
+
+
+class AboutPage(Page):
+    date = models.DateField("Post date", blank=True, null=True)
+    context = StreamField([
+        ('heading', blocks.CharBlock(form_classname="title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+        ("code", CodeBlock(label='Code')),
+    ], use_json_field=True, blank=True, null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('date'),
+        FieldPanel('context'),
+    ]
+
+    # Export fields over the API
+    api_fields = [
+        APIField('date'),
+        APIRichTextField('context'),
+    ]
+
