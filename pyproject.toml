@@ -22,6 +22,7 @@ drf-spectacular = "^0.26.4"
 
 [tool.poetry.group.dev.dependencies]
 pycodestyle = "^2.10.0"
+pylint = "^2.17.5"
 
 
 [tool.poetry.group.youtube.dependencies]

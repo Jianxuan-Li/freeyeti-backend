@@ -46,6 +46,9 @@ case $1 in
     test)
         poetry run python3 manage.py test
         ;;
+    lint)
+        poetry run pylint **/*.py
+        ;;
     coverage)
         poetry run coverage run --source='.' manage.py test
         poetry run coverage report
