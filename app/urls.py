@@ -1,7 +1,11 @@
 from django.conf import settings
 from django.urls import include, path
 from django.contrib import admin
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
@@ -10,6 +14,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from backend.search import views as search_views
 from .apis import api_router
 from backend.watch import urls as watch_urls
+from backend.yechat import urls as yechat_urls
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -28,17 +33,25 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
     urlpatterns += [
-        path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+        path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
         # Optional UI:
-        path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-        path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+        path(
+            "api/schema/swagger-ui/",
+            SpectacularSwaggerView.as_view(url_name="schema"),
+            name="swagger-ui",
+        ),
+        path(
+            "api/schema/redoc/",
+            SpectacularRedocView.as_view(url_name="schema"),
+            name="redoc",
+        ),
     ]
 
 urlpatterns = urlpatterns + [
-    path('api/v1/auth/', include('rest_registration.api.urls')),
-    path('api/v1/watch/', include(watch_urls)),
-    path('api/v2/', api_router.urls),
-
+    path("api/v1/auth/", include("rest_registration.api.urls")),
+    path("api/v1/watch/", include(watch_urls)),
+    path("api/v1/yechat/", include(yechat_urls)),
+    path("api/v2/", api_router.urls),
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:
