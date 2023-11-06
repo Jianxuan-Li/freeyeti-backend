@@ -44,3 +44,8 @@ class ChatRoomListSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+
+class AskJoinRoomSerializer(serializers.Serializer):
+    passcode = serializers.CharField(max_length=20, allow_blank=True, allow_null=True)
+    slug = serializers.CharField(max_length=50, allow_blank=True, allow_null=True)

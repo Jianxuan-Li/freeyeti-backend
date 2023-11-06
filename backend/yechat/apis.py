@@ -16,11 +16,7 @@ class RoomList(APIView):
     # authentication_classes = []
 
     def get(self, request):
-        rooms = (
-            ChatRoom.objects.filter(Q(user=request.user) | Q(is_private=False))
-            .order_by("-updated_at")
-            .all()
-        )
+        rooms = ChatRoom.objects.filter().order_by("-updated_at").all()
 
         serializer = ChatRoomListSerializer(rooms, many=True)
 
@@ -69,14 +65,16 @@ class Room(APIView):
         )
 
     def get(self, request, room_id):
-        room = ChatRoom.objects.filter(id=room_id).first()
+        room = ChatRoom.objects.filter(slug=room_id).first()
 
         if not room:
             return Response(
                 {"message": "Room not found"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        return Response({"data": room}, status=status.HTTP_200_OK)
+        serializer = ChatRoomListSerializer(room)
+
+        return Response({"data": serializer.data})
 
     def put(self, request, room_id):
         room = ChatRoom.objects.filter(id=room_id, user=request.user).first()
@@ -98,5 +96,41 @@ class Room(APIView):
         room.save()
         return Response(
             {"message": "Room updated successfully", "data": room},
+            status=status.HTTP_200_OK,
+        )
+
+
+class AskJoinRoom(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, room_id):
+        room = ChatRoom.objects.filter(slug=room_id).first()
+
+        if not room:
+            return Response(
+                {"message": "Room not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        if room.is_private:
+            if not request.data.get("passcode"):
+                return Response(
+                    {"message": "Passcode is required"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if room.passcode != request.data.get("passcode"):
+                return Response(
+                    {"message": "Invalid passcode"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        serializer = ChatRoomListSerializer(room)
+
+        return Response(
+            {
+                "message": "You have joined the room successfully",
+                "status": "success",
+                "data": serializer.data,
+            },
             status=status.HTTP_200_OK,
         )
