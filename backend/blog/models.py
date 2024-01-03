@@ -23,6 +23,32 @@ class APIRichTextField(APIField):
         super().__init__(name=name, serializer=serializer)
 
 
+class LifeBlogPage(Page):
+    body = RichTextField(blank=True)
+
+    author = models.CharField(max_length=255, blank=True, null=True)
+    date = models.DateField("Post date", blank=True, null=True)
+    context = StreamField([
+        ('heading', blocks.CharBlock(form_classname="title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+        ("code", CodeBlock(label='Code')),
+    ], use_json_field=True, blank=True, null=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('author'),
+        FieldPanel('date'),
+        FieldPanel('context'),
+    ]
+
+    # Export fields over the API
+    api_fields = [
+        APIField('author'),
+        APIField('date'),
+        APIRichTextField('context'),
+    ]
+
+
 class BlogPage(Page):
     body = RichTextField(blank=True)
 
