@@ -15,6 +15,7 @@ from backend.search import views as search_views
 from .apis import api_router
 from backend.watch import urls as watch_urls
 from backend.yechat import urls as yechat_urls
+from backend.blog import urls as blog_urls
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -51,6 +52,7 @@ urlpatterns = urlpatterns + [
     path("api/v1/auth/", include("rest_registration.api.urls")),
     path("api/v1/watch/", include(watch_urls)),
     path("api/v1/yechat/", include(yechat_urls)),
+    path("api/v1/blog/", include(blog_urls)),
     path("api/v2/", api_router.urls),
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
