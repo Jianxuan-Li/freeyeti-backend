@@ -5,9 +5,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
 from django.conf import settings
+from django.contrib.auth.models import User
 from .models import ChatRoom
 from django.db.models import Q
-from .serializer import ChatRoomCreationSerializer, ChatRoomListSerializer
+from .serializer import (
+    ChatRoomCreationSerializer,
+    ChatRoomListSerializer,
+    UserInfoSerializer,
+)
 
 
 class RoomList(APIView):
@@ -16,7 +21,11 @@ class RoomList(APIView):
     # authentication_classes = []
 
     def get(self, request):
-        rooms = ChatRoom.objects.filter().order_by("-updated_at").all()
+        rooms = (
+            ChatRoom.objects.filter(~Q(is_private=True) | Q(user=request.user))
+            .order_by("-updated_at")
+            .all()
+        )
 
         serializer = ChatRoomListSerializer(rooms, many=True)
 
@@ -32,6 +41,15 @@ class RoomList(APIView):
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        existing_room = ChatRoom.objects.filter(
+            slug=serializer.validated_data["slug"]
+        ).first()
+        if existing_room:
+            return Response(
+                {"message": "Room with this slug already exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         room = ChatRoom.objects.create(
             name=serializer.validated_data["name"],
@@ -133,4 +151,19 @@ class AskJoinRoom(APIView):
                 "data": serializer.data,
             },
             status=status.HTTP_200_OK,
+        )
+
+
+class ContactList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserInfoSerializer(users, many=True)
+
+        return Response(
+            {
+                "data": serializer.data,
+                "meta": {"count": len(users)},
+            }
         )
